@@ -1,12 +1,11 @@
-
 import streamlit as st
 import datetime
 from streamlit import session_state as SessionState
 
 # 定义一个计算倒计时的函数
-def calculate_countdown(event_datetime):
-    now = datetime.datetime.utcnow()
-    time_remaining = event_datetime - now
+def calculate_countdown(event_date):
+    now = datetime.date.today()
+    time_remaining = event_date - now
     if time_remaining.days < 0:
         return 0
     else:
@@ -25,13 +24,10 @@ st.sidebar.title("添加新倒计时")
 event_name = st.sidebar.text_input("事件名称")
 min_date = datetime.date.today()
 event_date = st.sidebar.date_input("事件日期", min_date, min_value=min_date)
-min_time = datetime.time.min
-event_time = st.sidebar.time_input("事件时间", min_time, key="event_time")
 
 if st.sidebar.button("添加倒计时"):
-    if event_name and event_date and event_time:
-        event_datetime = datetime.datetime.combine(event_date, event_time)
-        SessionState.events[event_name] = event_datetime
+    if event_name and event_date:
+        SessionState.events[event_name] = event_date
 
 # 删除事件部分
 with st.sidebar:
@@ -45,6 +41,6 @@ with st.sidebar:
 # 显示所有倒计时事件
 st.header("所有倒计时")
 
-for event_name, event_datetime in SessionState.events.items():
-    days_remaining = calculate_countdown(event_datetime)
+for event_name, event_date in SessionState.events.items():
+    days_remaining = calculate_countdown(event_date)
     st.write(f"距离 **{event_name}** 还有 {days_remaining} 天")
