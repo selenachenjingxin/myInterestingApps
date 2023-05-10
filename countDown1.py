@@ -21,7 +21,7 @@ event_name = st.sidebar.text_input("事件名称")
 min_date = datetime.date.today()
 event_date = st.sidebar.date_input("事件日期", min_date)
 
-if st.sidebar.button("添加事件"):
+if st.sidebar.button("添加倒计时"):
     if event_name and event_date:
         SessionState.events[event_name] = event_date
 
