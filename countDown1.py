@@ -26,10 +26,10 @@ if st.sidebar.button("添加倒计时"):
         SessionState.events[event_name] = event_date
 
 # 删除事件部分
-st.header("删除倒计时")
-event_to_remove = st.selectbox("选择要删除的事件", list(SessionState.events.keys()), key="event_to_remove")
+st.sidebar.header("删除倒计时")
+event_to_remove = st.sidebar.selectbox("选择要删除的事件", list(SessionState.events.keys()), key="event_to_remove")
 
-if st.button("删除倒计时"):
+if st.sidebar.button("删除倒计时"):
     if event_to_remove:
         del SessionState.events[event_to_remove]
         st.experimental_rerun()
