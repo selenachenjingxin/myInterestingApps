@@ -5,13 +5,16 @@ from streamlit import session_state as SessionState
 # 定义一个计算倒计时的函数
 def calculate_countdown(event_datetime):
     now = datetime.datetime.utcnow()
-    event_timestamp = event_datetime.timestamp()
-    time_remaining = event_timestamp - now.timestamp()
-    days_remaining = int(time_remaining // 86400)
-    hours_remaining = int((time_remaining % 86400) // 3600)
-    minutes_remaining = int(((time_remaining % 86400) % 3600) // 60)
-    seconds_remaining = int(((time_remaining % 86400) % 3600) % 60)
-    return days_remaining, hours_remaining, minutes_remaining, seconds_remaining
+    time_remaining = event_datetime - now
+    if time_remaining.days < 0:
+        return 0, 0, 0, 0
+    else:
+        days_remaining = time_remaining.days
+        hours_remaining = time_remaining.seconds // 3600
+        minutes_remaining = (time_remaining.seconds // 60) % 60
+        seconds_remaining = time_remaining.seconds % 60
+        return days_remaining, hours_remaining, minutes_remaining, seconds_remaining
+
 
 # 初始化SessionState
 if not SessionState.__contains__('events'):
@@ -43,7 +46,7 @@ with st.sidebar:
             st.experimental_rerun()
 
 # 显示所有倒计时事件
-st.header("显示所有倒计时：")
+st.header("您的所有倒计时：")
 
 for event_name, event_datetime in SessionState.events.items():
     days_remaining, hours_remaining, minutes_remaining, seconds_remaining = calculate_countdown(event_datetime)
