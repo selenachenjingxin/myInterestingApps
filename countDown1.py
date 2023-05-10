@@ -3,11 +3,14 @@ import datetime
 from streamlit import session_state as SessionState
 
 # 定义一个计算倒计时的函数
-def calculate_countdown(event_date):
-    today = datetime.datetime.now()
-    time_remaining = event_date - today
-    seconds_remaining = time_remaining.total_seconds()
-    return int(seconds_remaining)
+def calculate_countdown(event_datetime):
+    now = datetime.datetime.now()
+    time_remaining = event_datetime - now
+    days_remaining = time_remaining.days
+    hours_remaining = time_remaining.seconds // 3600
+    minutes_remaining = (time_remaining.seconds // 60) % 60
+    seconds_remaining = time_remaining.seconds % 60
+    return days_remaining, hours_remaining, minutes_remaining, seconds_remaining
 
 # 初始化SessionState
 if not SessionState.__contains__('events'):
@@ -41,5 +44,5 @@ if st.button("删除倒计时"):
 st.header("所有倒计时")
 
 for event_name, event_datetime in SessionState.events.items():
-    countdown = calculate_countdown(event_datetime)
-    st.write(f"距离 **{event_name}** 还有 {countdown} 秒")
+    days_remaining, hours_remaining, minutes_remaining, seconds_remaining = calculate_countdown(event_datetime)
+    st.write(f"距离 **{event_name}** 还有 {days_remaining} 天 {hours_remaining} 小时 {minutes_remaining} 分钟 {seconds_remaining} 秒")
