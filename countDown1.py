@@ -20,7 +20,7 @@ if not SessionState.__contains__('events'):
 st.title("倒计时小程序")
 
 # 侧边栏
-st.sidebar.title("添加新倒计时")
+st.sidebar.header("添加新倒计时")
 event_name = st.sidebar.text_input("事件名称")
 min_date = datetime.date.today()
 event_date = st.sidebar.date_input("事件日期", min_date, min_value=min_date)
