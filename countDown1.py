@@ -36,7 +36,7 @@ if st.sidebar.button("删除倒计时"):
         st.experimental_rerun()
 
 # 显示所有倒计时事件
-
+st.text("所有倒计时：")
 for event_name, event_date in SessionState.events.items():
     countdown = calculate_countdown(event_date)
     st.write(f"距离 **{event_name}** 还有 {countdown} 天")
