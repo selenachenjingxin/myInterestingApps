@@ -43,7 +43,7 @@ with st.sidebar:
             st.experimental_rerun()
 
 # 显示所有倒计时事件
-st.header("所有倒计时")
+st.header("显示所有倒计时：")
 
 for event_name, event_datetime in SessionState.events.items():
     days_remaining, hours_remaining, minutes_remaining, seconds_remaining = calculate_countdown(event_datetime)
