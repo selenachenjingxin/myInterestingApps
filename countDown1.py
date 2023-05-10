@@ -1,11 +1,19 @@
 import streamlit as st
 import datetime
+import pytz
 from streamlit import session_state as SessionState
+
+# 将日期时间对象转换为时区感知日期时间对象
+def to_local_datetime(dt, tz):
+    return tz.localize(dt)
 
 # 定义一个计算倒计时的函数
 def calculate_countdown(event_datetime):
     now = datetime.datetime.utcnow()
-    time_remaining = event_datetime - now
+    local_tz = pytz.timezone('Asia/Shanghai')
+    local_now = to_local_datetime(now, pytz.utc).astimezone(local_tz)
+    event_local_datetime = to_local_datetime(event_datetime, pytz.utc).astimezone(local_tz)
+    time_remaining = event_local_datetime - local_now
     if time_remaining.days < 0:
         return 0, 0, 0, 0
     else:
@@ -14,7 +22,6 @@ def calculate_countdown(event_datetime):
         minutes_remaining = (time_remaining.seconds // 60) % 60
         seconds_remaining = time_remaining.seconds % 60
         return days_remaining, hours_remaining, minutes_remaining, seconds_remaining
-
 
 # 初始化SessionState
 if not SessionState.__contains__('events'):
