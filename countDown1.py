@@ -4,12 +4,13 @@ from streamlit import session_state as SessionState
 
 # 定义一个计算倒计时的函数
 def calculate_countdown(event_datetime):
-    now = datetime.datetime.now()
-    time_remaining = event_datetime - now
-    days_remaining = time_remaining.days
-    hours_remaining = time_remaining.seconds // 3600
-    minutes_remaining = (time_remaining.seconds // 60) % 60
-    seconds_remaining = time_remaining.seconds % 60
+    now = datetime.datetime.utcnow()
+    event_timestamp = event_datetime.timestamp()
+    time_remaining = event_timestamp - now.timestamp()
+    days_remaining = int(time_remaining // 86400)
+    hours_remaining = int((time_remaining % 86400) // 3600)
+    minutes_remaining = int(((time_remaining % 86400) % 3600) // 60)
+    seconds_remaining = int(((time_remaining % 86400) % 3600) % 60)
     return days_remaining, hours_remaining, minutes_remaining, seconds_remaining
 
 # 初始化SessionState
@@ -24,8 +25,8 @@ st.sidebar.title("添加新倒计时")
 event_name = st.sidebar.text_input("事件名称")
 min_date = datetime.date.today()
 event_date = st.sidebar.date_input("事件日期", min_date, min_value=min_date)
-min_time = datetime.datetime.now().time()
-event_time = st.sidebar.time_input("事件时间", min_time, key="event_time", min_value=min_time)
+min_time = datetime.time.min
+event_time = st.sidebar.time_input("事件时间", min_time, key="event_time")
 
 if st.sidebar.button("添加倒计时"):
     if event_name and event_date and event_time:
