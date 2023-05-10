@@ -23,8 +23,9 @@ st.title("倒计时小程序")
 st.sidebar.title("添加新倒计时")
 event_name = st.sidebar.text_input("事件名称")
 min_date = datetime.date.today()
-event_date = st.sidebar.date_input("事件日期", min_date)
-event_time = st.sidebar.time_input("事件时间")
+event_date = st.sidebar.date_input("事件日期", min_date, min_value=min_date)
+min_time = datetime.datetime.now().time()
+event_time = st.sidebar.time_input("事件时间", min_time, key="event_time", min_value=min_time)
 
 if st.sidebar.button("添加倒计时"):
     if event_name and event_date and event_time:
@@ -32,16 +33,16 @@ if st.sidebar.button("添加倒计时"):
         SessionState.events[event_name] = event_datetime
 
 # 删除事件部分
-st.sidebar.header("删除倒计时")
-event_to_remove = st.sidebar.selectbox("选择要删除的事件", list(SessionState.events.keys()), key="event_to_remove")
-
-if st.sidebar.button("删除倒计时"):
-    if event_to_remove:
-        del SessionState.events[event_to_remove]
-        st.experimental_rerun()
+with st.sidebar:
+    st.header("删除倒计时")
+    event_to_remove = st.selectbox("选择要删除的事件", list(SessionState.events.keys()), key="event_to_remove")
+    if st.button("删除倒计时"):
+        if event_to_remove:
+            del SessionState.events[event_to_remove]
+            st.experimental_rerun()
 
 # 显示所有倒计时事件
-st.text("所有倒计时")
+st.header("所有倒计时")
 
 for event_name, event_datetime in SessionState.events.items():
     days_remaining, hours_remaining, minutes_remaining, seconds_remaining = calculate_countdown(event_datetime)
